@@ -33,14 +33,13 @@ public class ItemMetricService {
 
         ArrayList<ItemDayWiseMetric> sulfurasDailyItemMetric = new ArrayList<>();
         sulfurasDailyItemMetric.add(0, new ItemDayWiseMetric(0, 0, 0, 0));
-        sulfurasDailyItemMetric.add(0, new ItemDayWiseMetric(0, 0, 1, 0));
-        sulfurasDailyItemMetric.add(1, new ItemDayWiseMetric(-1, 0, -1, -1));
+        sulfurasDailyItemMetric.add(1, new ItemDayWiseMetric(0, 0, -1, -1));
         ItemMetric sulfurasItemMetric = new ItemMetric(sulfurasDailyItemMetric);
 
         ArrayList<ItemDayWiseMetric> backStagePassDailyMetric = new ArrayList<>();
         backStagePassDailyMetric.add(0, new ItemDayWiseMetric(-1, 2, 0, 10));
         backStagePassDailyMetric.add(1, new ItemDayWiseMetric(-1, 1, 11, 0));
-        backStagePassDailyMetric.add(2, new ItemDayWiseMetric(-1, 0, -1, -1));
+        backStagePassDailyMetric.add(2, new ItemDayWiseMetric(-1, -1000, -1, -1));
         ItemMetric backStagePassesItemMetric = new ItemMetric(backStagePassDailyMetric);
 
         this.itemMetricMap.put(AGED_BRIE, agedBrieItemMetric);
@@ -54,7 +53,6 @@ public class ItemMetricService {
      * @return Item metric
      */
     public ItemMetric   getItemsMetrics(String itemName) {
-        return this.itemMetricMap.containsKey(itemName) ? this.itemMetricMap.get(itemName) : new ItemMetric();
-                //Optional.of(this.itemMetricMap.get(itemName)).orElse(new ItemMetric());
+        return Optional.ofNullable(this.itemMetricMap.get(itemName)).orElse(new ItemMetric());
     }
 }

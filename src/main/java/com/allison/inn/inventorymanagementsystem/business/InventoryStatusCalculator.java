@@ -53,7 +53,7 @@ public class InventoryStatusCalculator {
      * @return Item status after on the day requested
      */
 
-    public Item itemStatusCalculator(Item item, ItemMetric itemMetric, int futureDate) {
+    private Item itemStatusCalculator(Item item, ItemMetric itemMetric, int futureDate) {
 
 
         Item finalItemStatus = item;
@@ -68,26 +68,11 @@ public class InventoryStatusCalculator {
                             sellInDaysRemaining < 0 && im.maxDayAdjuster < 0)).findFirst().get();
 
             // Once the sell by date has passed, quality degrades twice as fast
-            int qualitySellInAdjuster =  1;
+            int qualitySellInAdjuster =  finalItemStatus.sellIn >= 0 ? 1 : 2;;
 
-            switch (item.name) {
-                case CONCERT_BACKSTAGE_PASSES :
-                    finalItemStatus.sellIn = item.sellIn + itemMetricToBeApplied.sellInAdjuster;
-                    qualitySellInAdjuster = finalItemStatus.sellIn >= 0 ? 1 : 2;
-                    finalItemStatus.quality =  item.sellIn > 0 ? (item.quality + (itemMetricToBeApplied.qualityAdjuster*qualitySellInAdjuster)) > 0 ?
-                           (item.quality + (itemMetricToBeApplied.qualityAdjuster*qualitySellInAdjuster)): 0 : 0;
-
-                    break;
-                case SULFURAS:
-                    break;
-
-                    default:
-                        finalItemStatus.sellIn = item.sellIn + itemMetricToBeApplied.sellInAdjuster;
-                        qualitySellInAdjuster = finalItemStatus.sellIn >= 0 ? 1 : 2;
-                        finalItemStatus.quality = (item.quality + (itemMetricToBeApplied.qualityAdjuster*qualitySellInAdjuster)) > 0 ?
-                                (item.quality + (itemMetricToBeApplied.qualityAdjuster*qualitySellInAdjuster)): 0;
-                        break;
-            }
+            finalItemStatus.sellIn = item.sellIn + itemMetricToBeApplied.sellInAdjuster;
+            finalItemStatus.quality = (item.quality + (itemMetricToBeApplied.qualityAdjuster*qualitySellInAdjuster)) > 0 ?
+                    (item.quality + (itemMetricToBeApplied.qualityAdjuster*qualitySellInAdjuster)): 0;
 
 
         }
